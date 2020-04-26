@@ -1,0 +1,31 @@
+; Program to display counter from 0 to 9 using a 7 segment display.
+; codeRSH	DS: 04.03.2011	DE: 04.03.2011
+
+ORG 00H
+
+MOV R0, #0
+MOV DPTR, #60H
+CLR P3.3
+CLR P3.4
+
+RPT:
+	MOV A, R0
+	MOVC A, @A+DPTR
+	MOV P1, A
+	ACALL DELAY
+	CJNE R0, #9, THERE
+	MOV R0, #0FFH
+	THERE: INC R0
+	SJMP RPT
+
+DELAY:
+	MOV R2, #1
+	MORE: MOV R3, #1
+	AGAIN: DJNZ R3, AGAIN
+	DJNZ R2, MORE
+	RET
+
+ORG 60H
+DB C0H, 0F9H, 0A4H, 0B0H, 99H, 92H, 83H, F8H, 80H, 98H
+
+END
